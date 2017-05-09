@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`servie-send should send 304 with matching etag 1`] = `
+Object {
+  "body": undefined,
+  "bytesTransferred": 0,
+  "finished": false,
+  "headers": Object {
+    "etag": "\\"0-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU\\"",
+  },
+  "started": false,
+  "status": 304,
+  "statusText": undefined,
+  "trailers": Object {},
+}
+`;
+
+exports[`servie-send should send an empty response 1`] = `
+Object {
+  "body": "",
+  "bytesTransferred": 0,
+  "finished": false,
+  "headers": Object {
+    "content-length": "0",
+    "content-type": "text/plain",
+    "etag": "\\"0-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU\\"",
+  },
+  "started": false,
+  "status": 200,
+  "statusText": undefined,
+  "trailers": Object {},
+}
+`;
+
+exports[`servie-send should send json 1`] = `
+Object {
+  "body": "{\\"hello\\":\\"world\\"}",
+  "bytesTransferred": 0,
+  "finished": false,
+  "headers": Object {
+    "content-length": "17",
+    "content-type": "application/json",
+    "etag": "\\"h-k6I5cakU5erL8KjSUVTNownDwccvu5kU1Hxg88toFYg\\"",
+  },
+  "started": false,
+  "status": 200,
+  "statusText": undefined,
+  "trailers": Object {},
+}
+`;
+
+exports[`servie-send should send stream 1`] = `
+Object {
+  "body": Readable {
+    "_events": Object {},
+    "_eventsCount": 0,
+    "_maxListeners": undefined,
+    "_read": [Function],
+    "_readableState": ReadableState {
+      "awaitDrain": 0,
+      "buffer": BufferList {
+        "head": null,
+        "length": 0,
+        "tail": null,
+      },
+      "decoder": null,
+      "defaultEncoding": "utf8",
+      "emittedReadable": false,
+      "encoding": null,
+      "endEmitted": false,
+      "ended": false,
+      "flowing": null,
+      "highWaterMark": 16384,
+      "length": 0,
+      "needReadable": false,
+      "objectMode": false,
+      "pipes": null,
+      "pipesCount": 0,
+      "ranOut": false,
+      "readableListening": false,
+      "reading": false,
+      "readingMore": false,
+      "resumeScheduled": false,
+      "sync": true,
+    },
+    "domain": null,
+    "readable": true,
+  },
+  "bytesTransferred": 0,
+  "finished": false,
+  "headers": Object {
+    "content-type": "application/octet-stream",
+  },
+  "started": false,
+  "status": 200,
+  "statusText": undefined,
+  "trailers": Object {},
+}
+`;
+
+exports[`servie-send should send text 1`] = `
+Object {
+  "body": "hello world",
+  "bytesTransferred": 0,
+  "finished": false,
+  "headers": Object {
+    "content-length": "11",
+    "content-type": "text/plain",
+    "etag": "\\"b-uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek\\"",
+  },
+  "started": false,
+  "status": 200,
+  "statusText": undefined,
+  "trailers": Object {},
+}
+`;
