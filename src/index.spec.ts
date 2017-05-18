@@ -5,20 +5,29 @@ import { Readable } from 'stream'
 describe('servie-send', () => {
   it('should send text', () => {
     const req = new Request({ url: '/' })
+    const res = send(req, 'hello world')
 
-    expect(send(req, 'hello world')).toMatchSnapshot()
+    expect(res.status).toEqual(200)
+    expect(res.headers).toMatchSnapshot()
+    expect(res.body).toEqual('hello world')
   })
 
   it('should send an empty response', () => {
     const req = new Request({ url: '/' })
+    const res = send(req, null)
 
-    expect(send(req, null)).toMatchSnapshot()
+    expect(res.status).toEqual(200)
+    expect(res.headers).toMatchSnapshot()
+    expect(res.body).toEqual('')
   })
 
   it('should send json', () => {
     const req = new Request({ url: '/' })
+    const res = send(req, { hello: 'world' })
 
-    expect(send(req, { hello: 'world' })).toMatchSnapshot()
+    expect(res.status).toEqual(200)
+    expect(res.headers).toMatchSnapshot()
+    expect(res.body).toEqual('{"hello":"world"}')
   })
 
   it('should send stream', () => {
@@ -32,7 +41,10 @@ describe('servie-send', () => {
       }
     })
 
-    expect(send(req, stream)).toMatchSnapshot()
+    const res = send(req, stream)
+
+    expect(res.status).toEqual(200)
+    expect(res.headers).toMatchSnapshot()
   })
 
   it('should send 304 with matching etag', () => {
@@ -44,6 +56,10 @@ describe('servie-send', () => {
       body: ''
     })
 
-    expect(send(req, '')).toMatchSnapshot()
+    const res = send(req, '')
+
+    expect(res.status).toEqual(304)
+    expect(res.headers).toMatchSnapshot()
+    expect(res.body).toEqual(undefined)
   })
 })
