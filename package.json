@@ -43,7 +43,7 @@
     "rimraf": "^2.5.4",
     "servie": "^0.2.5",
     "throwback": "^2.0.0",
-    "ts-jest": "^20.0.2",
+    "ts-jest": "^21.0.0",
     "tslint": "^5.0.0",
     "tslint-config-standard": "^6.0.1",
     "typescript": "^2.2.1"
