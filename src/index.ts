@@ -103,7 +103,8 @@ export function entityTag (body: string | Buffer) {
  */
 function createEntityTag (body: string | Buffer) {
   const hash = createHash('sha256').update(body).digest('base64')
-  return `W/"${body.length.toString(36)}-${hash}"`
+
+  return `"${hash}"`
 }
 
 /**
@@ -125,7 +126,7 @@ function fresh (req: Request, etag?: string, lastModified?: Date): boolean {
 
   if (noneMatch && etag) {
     const isStale = noneMatch.split(TOKEN_LIST_REGEXP).every(match => {
-      return match !== etag && match !== `W/${etag}` && `W/${match}` !== etag
+      return match !== etag
     })
 
     if (isStale) return false
