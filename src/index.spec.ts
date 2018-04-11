@@ -1,36 +1,37 @@
-import { send } from './index'
-import { Request } from 'servie'
+import { sendEmpty, sendJson, sendText, sendStream, entityTag } from './index'
+import { Request, createHeaders } from 'servie'
 import { Readable } from 'stream'
+import { createBody } from 'servie/dist/body/node'
 
 describe('servie-send', () => {
-  it('should send text', () => {
+  it('should send text', async () => {
     const req = new Request({ url: '/' })
-    const res = send(req, 'hello world')
+    const res = sendText(req, 'hello world')
 
-    expect(res.status).toEqual(200)
-    expect(res.headers).toMatchSnapshot()
-    expect(res.body).toEqual('hello world')
+    expect(res.statusCode).toEqual(200)
+    expect(res.getHeaders()).toMatchSnapshot()
+    expect(await res.body.text()).toEqual('hello world')
   })
 
-  it('should send an empty response', () => {
+  it('should send an empty response', async () => {
     const req = new Request({ url: '/' })
-    const res = send(req, null)
+    const res = sendEmpty(req)
 
-    expect(res.status).toEqual(200)
-    expect(res.headers).toMatchSnapshot()
-    expect(res.body).toEqual('')
+    expect(res.statusCode).toEqual(200)
+    expect(res.getHeaders()).toMatchSnapshot()
+    expect(await res.body.text()).toEqual('')
   })
 
-  it('should send json', () => {
+  it('should send json', async () => {
     const req = new Request({ url: '/' })
-    const res = send(req, { hello: 'world' })
+    const res = sendJson(req, { hello: 'world' })
 
-    expect(res.status).toEqual(200)
-    expect(res.headers).toMatchSnapshot()
-    expect(res.body).toEqual('{"hello":"world"}')
+    expect(res.statusCode).toEqual(200)
+    expect(res.getHeaders()).toMatchSnapshot()
+    expect(await res.body.text()).toEqual('{"hello":"world"}')
   })
 
-  it('should send stream', () => {
+  it('should send stream', async () => {
     const req = new Request({ url: '/' })
     let chunk: string | null = 'hello world'
 
@@ -41,25 +42,26 @@ describe('servie-send', () => {
       }
     })
 
-    const res = send(req, stream)
+    const res = sendStream(req, stream)
 
-    expect(res.status).toEqual(200)
-    expect(res.headers).toMatchSnapshot()
+    expect(res.statusCode).toEqual(200)
+    expect(res.getHeaders()).toMatchSnapshot()
+    expect(await res.body.text()).toEqual('hello world')
   })
 
-  it('should send 304 with matching etag', () => {
+  it('should send 304 with matching etag', async () => {
     const req = new Request({
       url: '/',
-      headers: {
-        'If-None-Match': '"0-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU"'
-      },
-      body: ''
+      headers: createHeaders({
+        'If-None-Match': entityTag('')
+      }),
+      body: createBody('')
     })
 
-    const res = send(req, '')
+    const res = sendText(req, '')
 
-    expect(res.status).toEqual(304)
-    expect(res.headers).toMatchSnapshot()
-    expect(res.body).toEqual(undefined)
+    expect(res.statusCode).toEqual(304)
+    expect(res.getHeaders()).toMatchSnapshot()
+    expect(await res.body.text()).toEqual('')
   })
 })

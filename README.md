@@ -4,9 +4,8 @@
 [![NPM downloads](https://img.shields.io/npm/dm/servie-send.svg?style=flat)](https://npmjs.org/package/servie-send)
 [![Build status](https://img.shields.io/travis/serviejs/servie-send.svg?style=flat)](https://travis-ci.org/serviejs/servie-send)
 [![Test coverage](https://img.shields.io/coveralls/serviejs/servie-send.svg?style=flat)](https://coveralls.io/r/serviejs/servie-send?branch=master)
-[![Greenkeeper badge](https://badges.greenkeeper.io/serviejs/servie-send.svg)](https://greenkeeper.io/)
 
-> Create a HTTP response to send using Servie - a thin layer for creating a `Response` object with correct client-side cache headers.
+> Create a HTTP response to send using Servie - a thin layer for creating a `Response` object with cache headers.
 
 ## Installation
 
@@ -17,10 +16,14 @@ npm install servie-send --save
 ## Usage
 
 ```ts
-import { send } from 'servie-send'
+import { sendText, sendHtml, sendJson, sendStream, sendEmpty } from 'servie-send'
 
 function handle (req) {
-  return send(req, 'hello world!')
+  return sendText(req, 'hello world!')
+  return sendHtml(req, '<!doctype html>')
+  return sendJson(req, { json: true })
+  return sendStream(req, fs.createReadStream('example.txt'))
+  return sendEmpty(req) // Nothing in response.
 }
 ```
 

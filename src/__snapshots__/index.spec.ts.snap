@@ -1,58 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`servie-send should send 304 with matching etag 1`] = `
-Headers {
-  "raw": Array [
-    "ETag",
-    "\\"0-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU\\"",
-  ],
+Object {
+  "etag": "W/\\"0-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",
 }
 `;
 
-exports[`servie-send should send an empty response 1`] = `
-Headers {
-  "raw": Array [
-    "Content-Type",
-    "text/plain",
-    "Content-Length",
-    "0",
-    "ETag",
-    "\\"0-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU\\"",
-  ],
-}
-`;
+exports[`servie-send should send an empty response 1`] = `Object {}`;
 
 exports[`servie-send should send json 1`] = `
-Headers {
-  "raw": Array [
-    "Content-Type",
-    "application/json",
-    "Content-Length",
-    "17",
-    "ETag",
-    "\\"h-k6I5cakU5erL8KjSUVTNownDwccvu5kU1Hxg88toFYg\\"",
-  ],
+Object {
+  "content-length": "17",
+  "content-type": "application/json",
+  "etag": "W/\\"h-k6I5cakU5erL8KjSUVTNownDwccvu5kU1Hxg88toFYg=\\"",
 }
 `;
 
 exports[`servie-send should send stream 1`] = `
-Headers {
-  "raw": Array [
-    "Content-Type",
-    "application/octet-stream",
-  ],
+Object {
+  "content-type": "application/octet-stream",
 }
 `;
 
 exports[`servie-send should send text 1`] = `
-Headers {
-  "raw": Array [
-    "Content-Type",
-    "text/plain",
-    "Content-Length",
-    "11",
-    "ETag",
-    "\\"b-uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek\\"",
-  ],
+Object {
+  "content-length": "11",
+  "content-type": "text/plain",
+  "etag": "W/\\"b-uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=\\"",
 }
 `;
