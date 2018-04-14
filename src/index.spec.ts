@@ -9,7 +9,7 @@ describe('servie-send', () => {
     const res = sendText(req, 'hello world')
 
     expect(res.statusCode).toEqual(200)
-    expect(res.getHeaders()).toMatchSnapshot()
+    expect(res.allHeaders).toMatchSnapshot()
     expect(await res.body.text()).toEqual('hello world')
   })
 
@@ -18,7 +18,7 @@ describe('servie-send', () => {
     const res = sendEmpty(req)
 
     expect(res.statusCode).toEqual(200)
-    expect(res.getHeaders()).toMatchSnapshot()
+    expect(res.allHeaders).toMatchSnapshot()
     expect(await res.body.text()).toEqual('')
   })
 
@@ -27,7 +27,7 @@ describe('servie-send', () => {
     const res = sendJson(req, { hello: 'world' })
 
     expect(res.statusCode).toEqual(200)
-    expect(res.getHeaders()).toMatchSnapshot()
+    expect(res.allHeaders).toMatchSnapshot()
     expect(await res.body.text()).toEqual('{"hello":"world"}')
   })
 
@@ -45,7 +45,7 @@ describe('servie-send', () => {
     const res = sendStream(req, stream)
 
     expect(res.statusCode).toEqual(200)
-    expect(res.getHeaders()).toMatchSnapshot()
+    expect(res.allHeaders).toMatchSnapshot()
     expect(await res.body.text()).toEqual('hello world')
   })
 
@@ -61,7 +61,7 @@ describe('servie-send', () => {
     const res = sendText(req, '')
 
     expect(res.statusCode).toEqual(304)
-    expect(res.getHeaders()).toMatchSnapshot()
+    expect(res.allHeaders).toMatchSnapshot()
     expect(await res.body.text()).toEqual('')
   })
 })

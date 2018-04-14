@@ -38,18 +38,18 @@
   "homepage": "https://github.com/serviejs/servie-send",
   "devDependencies": {
     "@types/jest": "^22.2.2",
-    "@types/node": "^8.0.0",
+    "@types/node": "^9.6.5",
     "jest": "^22.4.3",
     "rimraf": "^2.5.4",
-    "servie": "^2.1.3",
+    "servie": "^3.0.0",
     "throwback": "^2.0.0",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
     "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.2.1"
+    "typescript": "^2.8.1"
   },
   "peerDependencies": {
-    "servie": "^2.1.0"
+    "servie": ">=2.1 <4"
   },
   "jest": {
     "transform": {
