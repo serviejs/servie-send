@@ -16,7 +16,7 @@ export interface SendOptions {
 
 const CACHE_CONTROL_NO_CACHE_REGEXP = /(?:^|,)\s*?no-cache\s*?(?:,|$)/
 const TOKEN_LIST_REGEXP = / *, */
-const ZERO_LENGTH_ENTITY_TAG = createEntityTag('')
+const ZERO_LENGTH_ENTITY_TAG = entityTag('')
 
 /**
  * Create an empty response.
@@ -66,42 +66,40 @@ export function sendHtml (req: Request, payload: CreateBody, options: SendOption
  * Generate the response for Servie.
  */
 export function send (req: Request, payload: CreateBody, options: SendOptions = {}) {
-  const headers = createHeaders(options.headers)
   let statusCode = options.statusCode || 200
   let body = req.method === 'HEAD' ? undefined : createBody(payload)
 
-  if (fresh(req, options.etag, options.mtime)) {
+  const headers = createHeaders(options.headers)
+  const { mtime, contentType, contentLength, skipEtag } = options
+  const etag = options.etag || (skipEtag ? undefined : toEntityTag(payload))
+
+  if (fresh(req, etag, mtime)) {
     statusCode = 304
     body = undefined
   } else {
-    if (options.contentType) headers.set('Content-Type', options.contentType)
-    if (options.contentLength) headers.set('Content-Length', String(options.contentLength))
+    if (contentType) headers.set('Content-Type', contentType)
+    if (contentLength) headers.set('Content-Length', String(contentLength))
   }
 
-  if (options.mtime) headers.set('Last-Modified', options.mtime.toUTCString())
-
-  if (options.etag) {
-    headers.set('ETag', options.etag)
-  } else if (!options.skipEtag) {
-    if (typeof payload === 'string' || Buffer.isBuffer(payload)) {
-      headers.set('ETag', entityTag(payload))
-    }
-  }
+  if (etag) headers.set('ETag', etag)
+  if (mtime) headers.set('Last-Modified', mtime.toUTCString())
 
   return new Response({ statusCode, headers, body })
 }
 
 /**
- * Create an ETag of the payload body.
+ * Create an ETag from the payload body.
  */
-export function entityTag (body: string | Buffer) {
-  return body.length === 0 ? ZERO_LENGTH_ENTITY_TAG : createEntityTag(body)
+function toEntityTag (body: any): string | undefined {
+  if (typeof body === 'string' || Buffer.isBuffer(body)) {
+    return body.length === 0 ? ZERO_LENGTH_ENTITY_TAG : entityTag(body)
+  }
 }
 
 /**
  * Create an entity tag for cache identification.
  */
-function createEntityTag (body: string | Buffer) {
+export function entityTag (body: string | Buffer): string {
   const hash = createHash('sha256').update(body).digest('base64')
 
   return `"${hash}"`
@@ -112,11 +110,11 @@ function createEntityTag (body: string | Buffer) {
  *
  * Reference: https://github.com/jshttp/fresh
  */
-function fresh (req: Request, etag?: string, lastModified?: Date): boolean {
-  const noneMatch = req.headers.get('if-none-match')
-  const modifiedSince = req.headers.get('if-modified-since')
+function fresh (req: Request, etag?: string, mtime?: Date): boolean {
+  const ifNoneMatch = req.headers.get('if-none-match')
+  const ifModifiedSince = req.headers.get('if-modified-since')
 
-  if (!noneMatch && !modifiedSince) return false
+  if (!ifNoneMatch && !ifModifiedSince) return false
 
   const cacheControl = req.headers.get('cache-control')
 
@@ -124,16 +122,16 @@ function fresh (req: Request, etag?: string, lastModified?: Date): boolean {
     return false
   }
 
-  if (noneMatch && etag) {
-    const isStale = noneMatch.split(TOKEN_LIST_REGEXP).every(match => {
+  if (ifNoneMatch && etag) {
+    const isStale = ifNoneMatch.split(TOKEN_LIST_REGEXP).every(match => {
       return match !== etag
     })
 
     if (isStale) return false
   }
 
-  if (modifiedSince && lastModified) {
-    const isStale = lastModified.getTime() > Date.parse(modifiedSince)
+  if (ifModifiedSince && mtime) {
+    const isStale = mtime.getTime() > Date.parse(ifModifiedSince)
 
     if (isStale) return false
   }

@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`servie-send should send 200 with changed etag 1`] = `
+Object {
+  "content-length": "0",
+  "content-type": "text/plain",
+  "etag": "\\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",
+}
+`;
+
 exports[`servie-send should send 304 with matching etag 1`] = `
 Object {
   "etag": "\\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",

@@ -64,4 +64,20 @@ describe('servie-send', () => {
     expect(res.allHeaders).toMatchSnapshot()
     expect(await res.body.text()).toEqual('')
   })
+
+  it('should send 200 with changed etag', async () => {
+    const req = new Request({
+      url: '/',
+      headers: createHeaders({
+        'If-None-Match': entityTag('content')
+      }),
+      body: createBody('')
+    })
+
+    const res = sendText(req, '')
+
+    expect(res.statusCode).toEqual(200)
+    expect(res.allHeaders).toMatchSnapshot()
+    expect(await res.body.text()).toEqual('')
+  })
 })
