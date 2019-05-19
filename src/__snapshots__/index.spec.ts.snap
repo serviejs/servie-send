@@ -1,39 +1,60 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`servie-send should always send 200 when not computing etag 1`] = `
+Headers {
+  "object": Object {
+    "content-length": "0",
+    "content-type": "text/plain",
+  },
+}
+`;
+
 exports[`servie-send should send 200 with changed etag 1`] = `
-Object {
-  "content-length": "0",
-  "content-type": "text/plain",
-  "etag": "\\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",
+Headers {
+  "object": Object {
+    "content-length": "0",
+    "content-type": "text/plain",
+    "etag": "\\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",
+  },
 }
 `;
 
 exports[`servie-send should send 304 with matching etag 1`] = `
-Object {
-  "etag": "\\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",
+Headers {
+  "object": Object {
+    "etag": "\\"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=\\"",
+  },
 }
 `;
 
-exports[`servie-send should send an empty response 1`] = `Object {}`;
+exports[`servie-send should send an empty response 1`] = `
+Headers {
+  "object": Object {},
+}
+`;
 
 exports[`servie-send should send json 1`] = `
-Object {
-  "content-length": "17",
-  "content-type": "application/json",
-  "etag": "\\"k6I5cakU5erL8KjSUVTNownDwccvu5kU1Hxg88toFYg=\\"",
+Headers {
+  "object": Object {
+    "content-length": "17",
+    "content-type": "application/json",
+  },
 }
 `;
 
 exports[`servie-send should send stream 1`] = `
-Object {
-  "content-type": "application/octet-stream",
+Headers {
+  "object": Object {
+    "content-type": "application/octet-stream",
+  },
 }
 `;
 
 exports[`servie-send should send text 1`] = `
-Object {
-  "content-length": "11",
-  "content-type": "text/plain",
-  "etag": "\\"uU0nuZNNPgilLlLX2n2r+sSE7+N6U4DukIj3rOLvzek=\\"",
+Headers {
+  "object": Object {
+    "content-length": "11",
+    "content-type": "text/plain",
+  },
 }
 `;

@@ -16,16 +16,32 @@ npm install servie-send --save
 ## Usage
 
 ```ts
-import { sendText, sendHtml, sendJson, sendStream, sendEmpty } from 'servie-send'
+import {
+  sendText,
+  sendHtml,
+  sendJson,
+  sendStream,
+  sendEmpty,
+  entityTag
+} from "servie-send";
 
-function handle (req) {
-  return sendText(req, 'hello world!')
-  return sendHtml(req, '<!doctype html>')
-  return sendJson(req, { json: true })
-  return sendStream(req, fs.createReadStream('example.txt'))
-  return sendEmpty(req) // Nothing in response.
+function handle(req) {
+  return sendText(req, "hello world!");
+  return sendHtml(req, "<!doctype html>");
+  return sendJson(req, { json: true });
+  return sendStream(req, fs.createReadStream("example.txt"));
+  return sendEmpty(req); // Nothing in response.
 }
 ```
+
+### Options
+
+- `status?` Change the default response status code (200).
+- `headers?` Define the headers to use for the response.
+- `contentType?` Define content length for the response.
+- `contentLength?` Define content length for the response.
+- `mtime?` Define the modification `Date` for the response.
+- `etag?` Define an ETag for the response (e.g. pre-computed with `entityTag()` or `true` for on-demand).
 
 ## TypeScript
 

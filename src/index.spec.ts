@@ -1,83 +1,95 @@
-import { sendEmpty, sendJson, sendText, sendStream, entityTag } from './index'
-import { Request, createHeaders } from 'servie'
-import { Readable } from 'stream'
-import { createBody } from 'servie/dist/body/node'
+import { sendEmpty, sendJson, sendText, sendStream, entityTag } from "./index";
+import { Request, Headers } from "servie/dist/node";
+import { Readable } from "stream";
 
-describe('servie-send', () => {
-  it('should send text', async () => {
-    const req = new Request({ url: '/' })
-    const res = sendText(req, 'hello world')
+describe("servie-send", () => {
+  it("should send text", async () => {
+    const req = new Request("/");
+    const res = sendText(req, "hello world");
 
-    expect(res.statusCode).toEqual(200)
-    expect(res.allHeaders).toMatchSnapshot()
-    expect(await res.body.text()).toEqual('hello world')
-  })
+    expect(res.status).toEqual(200);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual("hello world");
+  });
 
-  it('should send an empty response', async () => {
-    const req = new Request({ url: '/' })
-    const res = sendEmpty(req)
+  it("should send an empty response", async () => {
+    const req = new Request("/");
+    const res = sendEmpty(req);
 
-    expect(res.statusCode).toEqual(200)
-    expect(res.allHeaders).toMatchSnapshot()
-    expect(await res.body.text()).toEqual('')
-  })
+    expect(res.status).toEqual(200);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual("");
+  });
 
-  it('should send json', async () => {
-    const req = new Request({ url: '/' })
-    const res = sendJson(req, { hello: 'world' })
+  it("should send json", async () => {
+    const req = new Request("/");
+    const res = sendJson(req, { hello: "world" });
 
-    expect(res.statusCode).toEqual(200)
-    expect(res.allHeaders).toMatchSnapshot()
-    expect(await res.body.text()).toEqual('{"hello":"world"}')
-  })
+    expect(res.status).toEqual(200);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual('{"hello":"world"}');
+  });
 
-  it('should send stream', async () => {
-    const req = new Request({ url: '/' })
-    let chunk: string | null = 'hello world'
+  it("should send stream", async () => {
+    const req = new Request("/");
+    let chunk: string | null = "hello world";
 
     const stream = new Readable({
-      read () {
-        this.push(chunk)
-        chunk = null
+      read() {
+        this.push(chunk);
+        chunk = null;
       }
-    })
+    });
 
-    const res = sendStream(req, stream)
+    const res = sendStream(req, stream);
 
-    expect(res.statusCode).toEqual(200)
-    expect(res.allHeaders).toMatchSnapshot()
-    expect(await res.body.text()).toEqual('hello world')
-  })
+    expect(res.status).toEqual(200);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual("hello world");
+  });
 
-  it('should send 304 with matching etag', async () => {
-    const req = new Request({
-      url: '/',
-      headers: createHeaders({
-        'If-None-Match': entityTag('')
-      }),
-      body: createBody('')
-    })
+  it("should always send 200 when not computing etag", async () => {
+    const req = new Request("/", {
+      headers: {
+        "If-None-Match": entityTag("")
+      },
+      body: ""
+    });
 
-    const res = sendText(req, '')
+    const res = sendText(req, "");
 
-    expect(res.statusCode).toEqual(304)
-    expect(res.allHeaders).toMatchSnapshot()
-    expect(await res.body.text()).toEqual('')
-  })
+    expect(res.status).toEqual(200);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual("");
+  });
 
-  it('should send 200 with changed etag', async () => {
-    const req = new Request({
-      url: '/',
-      headers: createHeaders({
-        'If-None-Match': entityTag('content')
-      }),
-      body: createBody('')
-    })
+  it("should send 304 with matching etag", async () => {
+    const req = new Request("/", {
+      headers: {
+        "If-None-Match": entityTag("")
+      },
+      body: ""
+    });
 
-    const res = sendText(req, '')
+    const res = sendText(req, "", { etag: true });
 
-    expect(res.statusCode).toEqual(200)
-    expect(res.allHeaders).toMatchSnapshot()
-    expect(await res.body.text()).toEqual('')
-  })
-})
+    expect(res.status).toEqual(304);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual("");
+  });
+
+  it("should send 200 with changed etag", async () => {
+    const req = new Request("/", {
+      headers: {
+        "If-None-Match": entityTag("content")
+      },
+      body: ""
+    });
+
+    const res = sendText(req, "", { etag: true });
+
+    expect(res.status).toEqual(200);
+    expect(res.headers).toMatchSnapshot();
+    expect(await res.text()).toEqual("");
+  });
+});
